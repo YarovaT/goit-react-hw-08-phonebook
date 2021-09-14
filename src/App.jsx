@@ -1,49 +1,76 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import './App.css';
-import ContactForm from './components/ContactForm';
-import { contactsOperations, contactsSelectors } from './redux/contacts';
-import ContactList from './components/ContactList';
-import Filter from './components/Filter';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import React from "react";
+import { useEffect, lazy, Suspense } from "react";
+import { useDispatch } from "react-redux";
+import { Switch, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import "./App.css";
+
+import AppBar from "./components/AppBar";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
+
+import Container from "./components/Container";
+import Loader from "./components/Loader";
+
+import { authOperations } from "./redux/auth";
+
+const HomeView = lazy(() =>
+  import("./views/HomeView" /* webpackChunkName: "home-view" */)
+);
+const RegisterView = lazy(() =>
+  import("./views/RegisterView" /* webpackChunkName: "register-view" */)
+);
+const LoginView = lazy(() =>
+  import("./views/LoginView" /* webpackChunkName: "login-view" */)
+);
+const ContactView = lazy(() =>
+  import("./views/ContactView" /* webpackChunkName: "contacts-view" */)
+);
+const NotFoundView = lazy(() =>
+  import(
+    "./views/NotFoundView/NotFoundView" /* webpackChunkName: "not-found-view" */
+  )
+);
 
 function App() {
-  const isLoadingContacts = useSelector(state =>
-    contactsSelectors.getLoading(state),
-  );
-  const isError = useSelector(state => contactsSelectors.getError(state));
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(contactsOperations.fetchContacts());
+    dispatch(authOperations.getCurrentUser());
   }, [dispatch]);
 
   return (
-    <div className="Container">
-      <h1>Phonebook</h1>
-      <ContactForm />
+    <Container>
+      <AppBar />
 
-      <Filter />
+      <Suspense fallback={<Loader />}>
+        <Switch>
+          <PublicRoute path="/" exact>
+            <HomeView />
+          </PublicRoute>
 
-      <h2>Contacts</h2>
+          <PublicRoute path="/register" restricted redirectTo="/contacts">
+            <RegisterView />
+          </PublicRoute>
 
-      <ContactList />
+          <PublicRoute path="/login" restricted redirectTo="/contacts">
+            <LoginView />
+          </PublicRoute>
 
-      {isLoadingContacts}
-      {isError}
+          <PrivateRoute path="/contacts" redirectTo="/login">
+            <ContactView />
+          </PrivateRoute>
 
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
-      />
-    </div>
+          <Route>
+            <NotFoundView />
+          </Route>
+        </Switch>
+      </Suspense>
+
+      <ToastContainer autoClose={3700} position="top-center" />
+    </Container>
   );
 }
 
