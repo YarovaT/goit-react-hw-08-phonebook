@@ -1,45 +1,50 @@
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import React from 'react';
-import { connect } from 'react-redux';
+import { useState } from "react";
+import { toast } from "react-toastify";
+import React from "react";
+import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import style from "./ContactForm.module.css";
+import "react-toastify/dist/ReactToastify.css";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import { contactsSelectors, contactsOperations } from "../../redux/contacts";
 
-import style from './ContactForm.module.css';
-import 'react-toastify/dist/ReactToastify.css';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import { contactsOperations, contactsSelectors } from '../../redux/contacts';
+import Loader from "../Loader";
 
 const initialState = {
-  name: '',
-  number: '',
+  name: "",
+  number: "",
 };
 
-function ContactForm({ contacts, onSubmit }) {
+function ContactForm({ onSubmit }) {
   const [state, setState] = useState(initialState);
   const { name, number } = state;
 
-  const handleInputOnChange = event => {
+  const contacts = useSelector(contactsSelectors.getContacts);
+  const isLoading = useSelector(contactsSelectors.getLoading);
+
+  const handleInputOnChange = (event) => {
     const { name, value } = event.currentTarget;
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const onSubmitHandler = e => {
+  const onSubmitHandler = (e) => {
     e.preventDefault();
 
     const normalizedName = name.toLowerCase();
     const nameInContacts = contacts.find(
-      contact => contact.name === normalizedName,
+      (contact) => contact.name === normalizedName
     );
     const numberInContacts = contacts.find(
-      contact => contact.number === number,
+      (contact) => contact.number === number
     );
 
-    if (e.currentTarget.name === '') {
-      toast.info('Fill in the input fields name and number!');
+    if (e.currentTarget.name === "") {
+      toast.info("Fill in the input fields name and number!");
       return;
     }
     if (!nameInContacts && !numberInContacts) {
@@ -58,7 +63,7 @@ function ContactForm({ contacts, onSubmit }) {
     <form onSubmit={onSubmitHandler}>
       <div className={style.formGroup}>
         <label>
-          Name{' '}
+          Name{" "}
           <input
             type="text"
             name="name"
@@ -71,7 +76,7 @@ function ContactForm({ contacts, onSubmit }) {
         </label>
 
         <label>
-          Number{' '}
+          Number{" "}
           <input
             type="tel"
             name="number"
@@ -84,18 +89,22 @@ function ContactForm({ contacts, onSubmit }) {
         </label>
       </div>
 
-      <Button type="submit" variant="contained" startIcon={<AddIcon />}>
-        Add contact
-      </Button>
+      {!isLoading && (
+        <Button type="submit" variant="contained" startIcon={<AddIcon />}>
+          Add contact
+        </Button>
+      )}
+
+      {isLoading && <Loader />}
     </form>
   );
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   contacts: contactsSelectors.getContacts(state),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onSubmit: (name, number) =>
     dispatch(contactsOperations.addContact(name, number)),
 });
