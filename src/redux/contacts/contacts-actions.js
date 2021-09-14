@@ -1,41 +1,28 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAction } from "@reduxjs/toolkit";
+import {
+  FETCH_CONTACTS_REQUEST,
+  FETCH_CONTACTS_SUCCESS,
+  FETCH_CONTACTS_ERROR,
+  ADD_CONTACT_REQUEST,
+  ADD_CONTACT_SUCCESS,
+  ADD_CONTACT_ERROR,
+  DELETE_CONTACT_REQUEST,
+  DELETE_CONTACT_SUCCESS,
+  DELETE_CONTACT_ERROR,
+  SEARCH_CONTACT,
+} from "./contacts-types";
 
-export const fetchContactsRequest = createAction(
-  'contacts/fetchContactsRequest',
-);
+export const fetchContactsRequest = createAction(FETCH_CONTACTS_REQUEST);
 
-export const fetchContactsSuccess = createAction(
-  'contacts/fetchContactsSuccess',
-);
-export const fetchContactsError = createAction('contacts/fetchContactsError');
+export const fetchContactsSuccess = createAction(FETCH_CONTACTS_SUCCESS);
+export const fetchContactsError = createAction(FETCH_CONTACTS_ERROR);
 
-export const addContactRequest = createAction('contacts/addContactRequest');
-export const addContactSuccess = createAction('contacts/addContactSuccess');
-export const addContactError = createAction('contacts/addContactError');
+export const addContactRequest = createAction(ADD_CONTACT_REQUEST);
+export const addContactSuccess = createAction(ADD_CONTACT_SUCCESS);
+export const addContactError = createAction(ADD_CONTACT_ERROR);
 
-export const deleteContactRequest = createAction(
-  'contacts/deleteContactRequest',
-);
-export const deleteContactSuccess = createAction(
-  'contacts/deleteContactSuccess',
-);
-export const deleteContactError = createAction('contacts/deleteContactError');
+export const deleteContactRequest = createAction(DELETE_CONTACT_REQUEST);
+export const deleteContactSuccess = createAction(DELETE_CONTACT_SUCCESS);
+export const deleteContactError = createAction(DELETE_CONTACT_ERROR);
 
-export const searchContacts = createAction('contacts/search');
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {
-  fetchContactsRequest,
-  fetchContactsSuccess,
-  fetchContactsError,
-
-  addContactRequest,
-  addContactSuccess,
-  addContactError,
-
-  deleteContactRequest,
-  deleteContactSuccess,
-  deleteContactError,
-
-  searchContacts,
-};
+export const searchContacts = createAction(SEARCH_CONTACT);

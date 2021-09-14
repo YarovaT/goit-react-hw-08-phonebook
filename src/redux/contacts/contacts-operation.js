@@ -1,49 +1,71 @@
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import { toast } from "react-toastify";
+import {
+  fetchContactsRequest,
+  fetchContactsSuccess,
+  fetchContactsError,
+  addContactRequest,
+  addContactSuccess,
+  addContactError,
+  deleteContactRequest,
+  deleteContactSuccess,
+  deleteContactError,
+} from "./contacts-actions";
 
-// import { v4 as uuidv4 } from 'uuid';
-import actions from './contacts-actions';
-
-axios.defaults.baseURL = 'http://localhost:3131';
-
-const fetchContacts = () => async dispatch => {
-  dispatch(actions.fetchContactsRequest());
+const fetchContacts = () => async (dispatch) => {
+  dispatch(fetchContactsRequest());
 
   try {
-    const { data } = await axios.get('/contacts');
+    const { data } = await axios.get("/contacts");
 
-    dispatch(actions.fetchContactsSuccess(data));
+    dispatch(fetchContactsSuccess(data));
   } catch (error) {
-    dispatch(actions.fetchContactsError());
-    toast.error(error.message);
+    dispatch(fetchContactsError());
+    if (error.response.status === 404) {
+      toast.info("There is no such user's collection!");
+    } else if (error.response.status === 500) {
+      toast.error("Oops! Server error! Please try later!");
+    } else {
+      toast.error("Something went wrong! Please reload the page!");
+    }
   }
 };
 
-const addContact = (name, number) => async dispatch => {
+const addContact = (name, number) => async (dispatch) => {
   const contact = { name, number };
 
-  dispatch(actions.addContactRequest());
+  dispatch(addContactRequest());
 
   try {
-    const { data } = await axios.post('/contacts', contact);
+    const { data } = await axios.post("/contacts", contact);
 
-    dispatch(actions.addContactSuccess(data));
+    dispatch(addContactSuccess(data));
   } catch (error) {
-    dispatch(actions.addContactError(error));
-    toast.error(error.message);
+    dispatch(addContactError(error));
+    if (error.response.status === 400) {
+      toast.error("Contact creation error!");
+    } else {
+      toast.error("Something went wrong! Please reload the page!");
+    }
   }
 };
 
-const deleteContact = contactId => async dispatch => {
-  dispatch(actions.deleteContactRequest());
+const deleteContact = (contactId) => async (dispatch) => {
+  dispatch(deleteContactRequest());
 
   try {
     await axios.delete(`/contacts/${contactId}`);
 
-    dispatch(actions.deleteContactSuccess(contactId));
+    dispatch(deleteContactSuccess(contactId));
   } catch (error) {
-    dispatch(actions.deleteContactError(error));
-    toast.error(error.message);
+    dispatch(deleteContactError(error));
+    if (error.response.status === 404) {
+      toast.info("There is no such user's collection!");
+    } else if (error.response.status === 500) {
+      toast.error("Oops! Server error! Please try later!");
+    } else {
+      toast.error("Something went wrong! Please reload the page!");
+    }
   }
 };
 
