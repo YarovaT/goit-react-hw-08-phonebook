@@ -62,11 +62,9 @@ function ContactForm({ contacts, onSubmit }) {
       return name.trim() === "" || number.trim() === "";
     };
 
-    if (chekedIsEmptyField) {
+    if (chekedIsEmptyField(name, number)) {
       toast.info("Fill in the input fields name and number!");
-      return;
-    }
-    if (!nameInContacts && !numberInContacts) {
+    } else if (!nameInContacts && !numberInContacts) {
       onSubmit(name, number);
       reset();
       return;
