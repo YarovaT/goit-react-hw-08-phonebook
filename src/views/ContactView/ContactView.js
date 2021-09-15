@@ -4,7 +4,7 @@ import ContactList from "../../components/ContactList";
 import ContactForm from "../../components/ContactForm";
 import Filter from "../../components/Filter";
 import { contactsOperations } from "../../redux/contacts";
-import s from "./ContactView.module.css";
+import style from "./ContactView.module.css";
 
 export default function ContactsView() {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ export default function ContactsView() {
   useEffect(() => dispatch(contactsOperations.fetchContacts()), [dispatch]);
 
   return (
-    <div className={s.wrapper}>
+    <div className={style.wrapper}>
       <h1>Phonebook</h1>
       <ContactForm />
       <h2>Contacts</h2>

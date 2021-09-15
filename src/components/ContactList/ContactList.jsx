@@ -3,10 +3,11 @@ import ContactItem from "./ContactItem";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { contactsOperations, contactsSelectors } from "../../redux/contacts";
+import style from "./ContactList.module.css";
 
 const ContactList = ({ contacts, onDeleteContact }) => {
   return (
-    <ol>
+    <ol className={style.list}>
       {contacts.length > 0 && (
         <>
           {contacts.map(({ name, number, id }) => (

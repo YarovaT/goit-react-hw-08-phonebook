@@ -4,7 +4,7 @@ import { authSelectors } from "../../redux/auth";
 import style from "./Navigation.module.css";
 
 function Navigation() {
-  const isLoggedIn = useSelector(authSelectors.getIsAuthenticated);
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
 
   return (
     <nav className={style.nav}>

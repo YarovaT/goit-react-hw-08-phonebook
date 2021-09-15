@@ -27,9 +27,9 @@ const useStyles = makeStyles(() => ({
     maxWidth: "400px",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: "10px",
+    marginTop: "50px",
     marginBottom: "30px",
-    padding: "40px 0",
+
     textAlign: "center",
   },
 }));

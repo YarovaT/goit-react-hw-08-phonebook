@@ -8,7 +8,7 @@ export default function PublicRoute({
   children,
   ...routeProps
 }) {
-  const isLoggedIn = useSelector(authSelectors.getIsAuthenticated);
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
 
   return (
     <Route {...routeProps}>

@@ -8,7 +8,7 @@ import UserMenu from "../UserMenu";
 import AuthNav from "../AuthNav";
 import { authSelectors } from "../../redux/auth";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
   },
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonAppBar() {
   const classes = useStyles();
-  const isLoggedIn = useSelector(authSelectors.getIsAuthenticated);
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
 
   return (
     <div className={classes.root}>

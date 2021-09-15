@@ -5,7 +5,7 @@ import style from "./Loader.module.css";
 function LoaderSpinner() {
   return (
     <div className={style.overlay}>
-      <Loader type="ThreeDots" color="#f50057" height="35" />
+      <Loader type="ThreeDots" color="#196F3D " height="35" />
     </div>
   );
 }

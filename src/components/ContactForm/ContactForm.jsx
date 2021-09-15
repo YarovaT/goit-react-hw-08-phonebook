@@ -2,25 +2,38 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import React from "react";
 import { connect } from "react-redux";
-import { useSelector } from "react-redux";
 import style from "./ContactForm.module.css";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { contactsSelectors, contactsOperations } from "../../redux/contacts";
-
 import Loader from "../Loader";
+import { useSelector } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    backgroundColor: "#52BE80",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    "&:hover": {
+      backgroundColor: "#145A32",
+      borderColor: "#145A32",
+      boxShadow: "none",
+    },
+  },
+}));
 
 const initialState = {
   name: "",
   number: "",
 };
 
-function ContactForm({ onSubmit }) {
+function ContactForm({ contacts, onSubmit }) {
+  const classes = useStyles();
   const [state, setState] = useState(initialState);
   const { name, number } = state;
-
-  const contacts = useSelector(contactsSelectors.getContacts);
   const isLoading = useSelector(contactsSelectors.getLoading);
 
   const handleInputOnChange = (event) => {
@@ -36,19 +49,25 @@ function ContactForm({ onSubmit }) {
     e.preventDefault();
 
     const normalizedName = name.toLowerCase();
+
     const nameInContacts = contacts.find(
       (contact) => contact.name === normalizedName
     );
+
     const numberInContacts = contacts.find(
       (contact) => contact.number === number
     );
 
-    if (e.currentTarget.name === "") {
+    const chekedIsEmptyField = (name, number) => {
+      return name.trim() === "" || number.trim() === "";
+    };
+
+    if (chekedIsEmptyField) {
       toast.info("Fill in the input fields name and number!");
       return;
     }
     if (!nameInContacts && !numberInContacts) {
-      onSubmit(normalizedName, number);
+      onSubmit(name, number);
       reset();
       return;
     }
@@ -60,7 +79,7 @@ function ContactForm({ onSubmit }) {
   };
 
   return (
-    <form onSubmit={onSubmitHandler}>
+    <form onSubmit={onSubmitHandler} className={style.form}>
       <div className={style.formGroup}>
         <label>
           Name{" "}
@@ -90,7 +109,12 @@ function ContactForm({ onSubmit }) {
       </div>
 
       {!isLoading && (
-        <Button type="submit" variant="contained" startIcon={<AddIcon />}>
+        <Button
+          className={classes.button}
+          type="submit"
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
           Add contact
         </Button>
       )}

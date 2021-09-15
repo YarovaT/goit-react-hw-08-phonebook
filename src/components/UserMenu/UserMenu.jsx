@@ -1,10 +1,21 @@
 import { useSelector, useDispatch } from "react-redux";
 import { authSelectors, authOperations } from "../../redux/auth";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 import defaultAvatar from "../../img/avatar.png";
 import style from "./UserMenu.module.css";
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    backgroundColor: "#52BE80",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+}));
+
 export default function UserMenu() {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const name = useSelector(authSelectors.getUserName);
 
@@ -18,7 +29,7 @@ export default function UserMenu() {
       />
       <span className={style.name}>Welcome, {name}</span>
       <Button
-        color="secondary"
+        className={classes.button}
         variant="outlined"
         type="button"
         onClick={() => dispatch(authOperations.logOut())}

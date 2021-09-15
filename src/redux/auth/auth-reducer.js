@@ -42,7 +42,7 @@ const error = createReducer(null, {
   [getCurrentUserRequest]: () => null,
 });
 
-const isAuthenticated = createReducer(false, {
+const isLoggedIn = createReducer(false, {
   [registerSuccess]: () => true,
   [loginSuccess]: () => true,
   [getCurrentUserSuccess]: () => true,
@@ -69,7 +69,7 @@ const isLoading = createReducer(false, {
 
 export default combineReducers({
   user,
-  isAuthenticated,
+  isLoggedIn,
   token,
   error,
   isLoading,
