@@ -45,22 +45,22 @@ function ContactForm({ contacts, onSubmit }) {
     }));
   };
 
+  const normalizedName = name.toLowerCase();
+
+  const nameInContacts = contacts.find(
+    (contact) => contact.name === normalizedName
+  );
+
+  const numberInContacts = contacts.find(
+    (contact) => contact.number === number
+  );
+
+  const chekedIsEmptyField = (name, number) => {
+    return name.trim() === "" || number.trim() === "";
+  };
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
-    const normalizedName = name.toLowerCase();
-
-    const nameInContacts = contacts.find(
-      (contact) => contact.name === normalizedName
-    );
-
-    const numberInContacts = contacts.find(
-      (contact) => contact.number === number
-    );
-
-    const chekedIsEmptyField = (name, number) => {
-      return name.trim() === "" || number.trim() === "";
-    };
 
     if (chekedIsEmptyField(name, number)) {
       toast.info("Fill in the input fields name and number!");
